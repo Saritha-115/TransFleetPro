@@ -1,0 +1,4 @@
+com.transfleet.strategy.CorporatePricing
+com.transfleet.strategy.PricingStrategy
+com.transfleet.strategy.StandardPricing
+com.transfleet.strategy.PremiumPricing

@@ -1,0 +1,6 @@
+com.transfleet.exceptions.InvalidRouteException
+com.transfleet.exceptions.VehicleNotAvailableException
+com.transfleet.exceptions.ValidationException
+com.transfleet.exceptions.DriverNotAvailableException
+com.transfleet.exceptions.CapacityExceededException
+com.transfleet.exceptions.InsufficientCreditException

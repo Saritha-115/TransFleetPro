@@ -1,0 +1,267 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports
+              http://jasperreports.sourceforge.net/xsd/jasperreport.xsd"
+              name="fleet_performance_report" pageWidth="842" pageHeight="595"
+              orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20"
+              topMargin="20" bottomMargin="20">
+    
+    <parameter name="REPORT_TITLE" class="java.lang.String"/>
+    <parameter name="COMPANY_NAME" class="java.lang.String"/>
+    
+    <queryString>
+        <![CDATA[SELECT 
+            v.vehicle_id,
+            v.registration_number,
+            v.vehicle_type,
+            COUNT(o.order_id) as total_orders,
+            COALESCE(SUM(o.estimated_distance), 0) as total_distance,
+            COALESCE(SUM(o.delivery_cost), 0) as total_revenue,
+            COALESCE(SUM(e.amount), 0) as total_expenses,
+            (COALESCE(SUM(o.delivery_cost), 0) - COALESCE(SUM(e.amount), 0)) as net_profit,
+            CASE 
+                WHEN COUNT(o.order_id) > 0 THEN ROUND((COUNT(o.order_id) / 30.0) * 100, 2)
+                ELSE 0 
+            END as utilization_percent
+        FROM vehicles v
+        LEFT JOIN orders o ON v.vehicle_id = o.vehicle_id AND o.order_status='Delivered'
+        LEFT JOIN expenses e ON v.vehicle_id = e.vehicle_id
+        GROUP BY v.vehicle_id, v.registration_number, v.vehicle_type
+        ORDER BY total_revenue DESC]]>
+    </queryString>
+    
+    <field name="vehicle_id" class="java.lang.Integer"/>
+    <field name="registration_number" class="java.lang.String"/>
+    <field name="vehicle_type" class="java.lang.String"/>
+    <field name="total_orders" class="java.lang.Long"/>
+    <field name="total_distance" class="java.math.BigDecimal"/>
+    <field name="total_revenue" class="java.math.BigDecimal"/>
+    <field name="total_expenses" class="java.math.BigDecimal"/>
+    <field name="net_profit" class="java.math.BigDecimal"/>
+    <field name="utilization_percent" class="java.math.BigDecimal"/>
+    
+    <variable name="total_revenue_sum" class="java.math.BigDecimal" calculation="Sum">
+        <variableExpression><![CDATA[$F{total_revenue}]]></variableExpression>
+    </variable>
+    
+    <variable name="total_expenses_sum" class="java.math.BigDecimal" calculation="Sum">
+        <variableExpression><![CDATA[$F{total_expenses}]]></variableExpression>
+    </variable>
+    
+    <variable name="net_profit_sum" class="java.math.BigDecimal" calculation="Sum">
+        <variableExpression><![CDATA[$F{net_profit}]]></variableExpression>
+    </variable>
+    
+    <variable name="total_orders_sum" class="java.lang.Long" calculation="Sum">
+        <variableExpression><![CDATA[$F{total_orders}]]></variableExpression>
+    </variable>
+    
+    <title>
+        <band height="100">
+            <rectangle>
+                <reportElement x="0" y="0" width="802" height="100" backcolor="#2C3E50"/>
+            </rectangle>
+            <textField>
+                <reportElement x="10" y="15" width="782" height="35" forecolor="#FFFFFF"/>
+                <textElement textAlignment="Center">
+                    <font size="24" isBold="true"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$P{REPORT_TITLE}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="10" y="50" width="782" height="20" forecolor="#ECF0F1"/>
+                <textElement textAlignment="Center">
+                    <font size="14"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$P{COMPANY_NAME}]]></textFieldExpression>
+            </textField>
+            <textField pattern="dd-MM-yyyy HH:mm:ss">
+                <reportElement x="10" y="75" width="782" height="20" forecolor="#BDC3C7"/>
+                <textElement textAlignment="Center">
+                    <font size="10"/>
+                </textElement>
+                <textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+            </textField>
+        </band>
+    </title>
+    
+    <pageHeader>
+        <band height="40">
+            <staticText>
+                <reportElement x="0" y="10" width="802" height="25" forecolor="#34495E"/>
+                <textElement textAlignment="Left">
+                    <font size="16" isBold="true"/>
+                </textElement>
+                <text><![CDATA[Vehicle-wise Profitability Analysis]]></text>
+            </staticText>
+            <line>
+                <reportElement x="0" y="38" width="802" height="1" forecolor="#BDC3C7"/>
+            </line>
+        </band>
+    </pageHeader>
+    
+    <columnHeader>
+        <band height="30">
+            <rectangle>
+                <reportElement x="0" y="0" width="802" height="30" backcolor="#3498DB"/>
+            </rectangle>
+            <staticText>
+                <reportElement x="5" y="5" width="40" height="20" forecolor="#FFFFFF"/>
+                <textElement textAlignment="Center"><font size="10" isBold="true"/></textElement>
+                <text><![CDATA[ID]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="50" y="5" width="100" height="20" forecolor="#FFFFFF"/>
+                <textElement><font size="10" isBold="true"/></textElement>
+                <text><![CDATA[Registration]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="155" y="5" width="70" height="20" forecolor="#FFFFFF"/>
+                <textElement><font size="10" isBold="true"/></textElement>
+                <text><![CDATA[Type]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="230" y="5" width="60" height="20" forecolor="#FFFFFF"/>
+                <textElement textAlignment="Center"><font size="10" isBold="true"/></textElement>
+                <text><![CDATA[Orders]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="295" y="5" width="80" height="20" forecolor="#FFFFFF"/>
+                <textElement textAlignment="Right"><font size="10" isBold="true"/></textElement>
+                <text><![CDATA[Distance]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="380" y="5" width="90" height="20" forecolor="#FFFFFF"/>
+                <textElement textAlignment="Right"><font size="10" isBold="true"/></textElement>
+                <text><![CDATA[Revenue]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="475" y="5" width="90" height="20" forecolor="#FFFFFF"/>
+                <textElement textAlignment="Right"><font size="10" isBold="true"/></textElement>
+                <text><![CDATA[Expenses]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="570" y="5" width="100" height="20" forecolor="#FFFFFF"/>
+                <textElement textAlignment="Right"><font size="10" isBold="true"/></textElement>
+                <text><![CDATA[Net Profit]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="675" y="5" width="120" height="20" forecolor="#FFFFFF"/>
+                <textElement textAlignment="Right"><font size="10" isBold="true"/></textElement>
+                <text><![CDATA[Utilization %]]></text>
+            </staticText>
+        </band>
+    </columnHeader>
+    
+    <detail>
+        <band height="25">
+            <rectangle>
+                <reportElement x="0" y="0" width="802" height="25" backcolor="#ECF0F1">
+                    <printWhenExpression><![CDATA[new Boolean($V{REPORT_COUNT}.intValue()%2==0)]]></printWhenExpression>
+                </reportElement>
+            </rectangle>
+            <textField>
+                <reportElement x="5" y="3" width="40" height="20"/>
+                <textElement textAlignment="Center"><font size="9"/></textElement>
+                <textFieldExpression><![CDATA[$F{vehicle_id}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="50" y="3" width="100" height="20"/>
+                <textElement><font size="9" isBold="true"/></textElement>
+                <textFieldExpression><![CDATA[$F{registration_number}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="155" y="3" width="70" height="20"/>
+                <textElement><font size="9"/></textElement>
+                <textFieldExpression><![CDATA[$F{vehicle_type}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="230" y="3" width="60" height="20"/>
+                <textElement textAlignment="Center"><font size="9"/></textElement>
+                <textFieldExpression><![CDATA[$F{total_orders}]]></textFieldExpression>
+            </textField>
+            <textField pattern="#,##0.00">
+                <reportElement x="295" y="3" width="80" height="20"/>
+                <textElement textAlignment="Right"><font size="9"/></textElement>
+                <textFieldExpression><![CDATA[$F{total_distance}]]></textFieldExpression>
+            </textField>
+            <textField pattern="#,##0.00">
+                <reportElement x="380" y="3" width="90" height="20"/>
+                <textElement textAlignment="Right"><font size="9" isBold="true"/></textElement>
+                <textFieldExpression><![CDATA[$F{total_revenue}]]></textFieldExpression>
+            </textField>
+            <textField pattern="#,##0.00">
+                <reportElement x="475" y="3" width="90" height="20"/>
+                <textElement textAlignment="Right"><font size="9"/></textElement>
+                <textFieldExpression><![CDATA[$F{total_expenses}]]></textFieldExpression>
+            </textField>
+            <textField pattern="#,##0.00">
+                <reportElement x="570" y="3" width="100" height="20" forecolor="#27AE60">
+                    <printWhenExpression><![CDATA[$F{net_profit}.doubleValue() >= 0]]></printWhenExpression>
+                </reportElement>
+                <textElement textAlignment="Right"><font size="9" isBold="true"/></textElement>
+                <textFieldExpression><![CDATA[$F{net_profit}]]></textFieldExpression>
+            </textField>
+            <textField pattern="#,##0.00">
+                <reportElement x="570" y="3" width="100" height="20" forecolor="#E74C3C">
+                    <printWhenExpression><![CDATA[$F{net_profit}.doubleValue() < 0]]></printWhenExpression>
+                </reportElement>
+                <textElement textAlignment="Right"><font size="9" isBold="true"/></textElement>
+                <textFieldExpression><![CDATA[$F{net_profit}]]></textFieldExpression>
+            </textField>
+            <textField pattern="#,##0.00">
+                <reportElement x="675" y="3" width="120" height="20"/>
+                <textElement textAlignment="Right"><font size="9"/></textElement>
+                <textFieldExpression><![CDATA[$F{utilization_percent} + "%"]]></textFieldExpression>
+            </textField>
+            <line>
+                <reportElement x="0" y="24" width="802" height="1" forecolor="#BDC3C7"/>
+            </line>
+        </band>
+    </detail>
+    
+    <columnFooter>
+        <band height="50">
+            <rectangle>
+                <reportElement x="0" y="5" width="802" height="40" backcolor="#34495E"/>
+            </rectangle>
+            <staticText>
+                <reportElement x="50" y="15" width="175" height="20" forecolor="#FFFFFF"/>
+                <textElement textAlignment="Right"><font size="12" isBold="true"/></textElement>
+                <text><![CDATA[TOTALS:]]></text>
+            </staticText>
+            <textField>
+                <reportElement x="230" y="25" width="60" height="15" forecolor="#FFFFFF"/>
+                <textElement textAlignment="Center"><font size="10" isBold="true"/></textElement>
+                <textFieldExpression><![CDATA[$V{total_orders_sum}]]></textFieldExpression>
+            </textField>
+            <textField pattern="#,##0.00">
+                <reportElement x="380" y="25" width="90" height="15" forecolor="#FFFFFF"/>
+                <textElement textAlignment="Right"><font size="10" isBold="true"/></textElement>
+                <textFieldExpression><![CDATA["Rs. " + $V{total_revenue_sum}]]></textFieldExpression>
+            </textField>
+            <textField pattern="#,##0.00">
+                <reportElement x="475" y="25" width="90" height="15" forecolor="#FFFFFF"/>
+                <textElement textAlignment="Right"><font size="10" isBold="true"/></textElement>
+                <textFieldExpression><![CDATA["Rs. " + $V{total_expenses_sum}]]></textFieldExpression>
+            </textField>
+            <textField pattern="#,##0.00">
+                <reportElement x="570" y="25" width="100" height="15" forecolor="#2ECC71"/>
+                <textElement textAlignment="Right"><font size="11" isBold="true"/></textElement>
+                <textFieldExpression><![CDATA["Rs. " + $V{net_profit_sum}]]></textFieldExpression>
+            </textField>
+        </band>
+    </columnFooter>
+    
+    <pageFooter>
+        <band height="30">
+            <textField>
+                <reportElement x="702" y="10" width="100" height="15" forecolor="#7F8C8D"/>
+                <textElement textAlignment="Right"><font size="8"/></textElement>
+                <textFieldExpression><![CDATA["Page " + $V{PAGE_NUMBER}]]></textFieldExpression>
+            </textField>
+        </band>
+    </pageFooter>
+</jasperReport>
+
