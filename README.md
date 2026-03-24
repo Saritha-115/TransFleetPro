@@ -95,6 +95,7 @@ com.transfleet
 │
 
 ├── config # Database connection (Singleton)
+
 ├── model # Entity classes
 
 ├── dao # CRUD operations
