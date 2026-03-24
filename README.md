@@ -91,10 +91,10 @@ The system follows the **MVC (Model–View–Controller)** architecture:
 
 
 com.transfleet
+
 │
 
 ├── config # Database connection (Singleton)
-
 ├── model # Entity classes
 
 ├── dao # CRUD operations
