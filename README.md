@@ -5,7 +5,7 @@
 
 The system automates delivery operations, optimizes fleet allocation, and provides analytical insights to support efficient decision-making in logistics management.
 
-This project was developed as part of the **Enterprise Application Development (EAD)** coursework for the *Diploma in Computer System Design*.
+This project was developed as part of the **Enterprise Application Development (EAD)** coursework for the *Diploma in Software Engineering*.
 
 ---
 
@@ -164,5 +164,5 @@ The **Orders** table acts as the central entity linking:
 ## 👩‍💻 Developed By
 
 **Saritha Themiyadasa**  
-Diploma in Software Engineering
+Diploma in Software Engineering  
 Enterprise Application Development (EAD)
