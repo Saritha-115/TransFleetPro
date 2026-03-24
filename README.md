@@ -164,5 +164,5 @@ The **Orders** table acts as the central entity linking:
 ## 👩‍💻 Developed By
 
 **Saritha Themiyadasa**  
-Diploma in Software Engineering 
+Diploma in Software Engineering
 Enterprise Application Development (EAD)
