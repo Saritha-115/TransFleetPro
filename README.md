@@ -134,7 +134,7 @@ The **Orders** table acts as the central entity linking:
 ---
 
 ## 🎥 Demo Video
-👉 [Add your demo video link here  ](https://www.linkedin.com/posts/saritha-themiyadasa-115461249_java-backenddevelopment-softwareengineering-activity-7442246751610150912-dFvg?utm_source=share&utm_medium=member_desktop&rcm=ACoAAD14LWEB0K36sCsdgFTDQO328LsuVzKT2YA)
+👉 [Demo video link   ](https://www.linkedin.com/posts/saritha-themiyadasa-115461249_java-backenddevelopment-softwareengineering-activity-7442246751610150912-dFvg?utm_source=share&utm_medium=member_desktop&rcm=ACoAAD14LWEB0K36sCsdgFTDQO328LsuVzKT2YA)
 
 ---
 
