@@ -92,14 +92,23 @@ The system follows the **MVC (Model–View–Controller)** architecture:
 
 com.transfleet
 │
+
 ├── config # Database connection (Singleton)
+
 ├── model # Entity classes
+
 ├── dao # CRUD operations
+
 ├── view # UI components (Swing)
+
 ├── strategy # Pricing strategies
+
 ├── util # Validation utilities
+
 ├── exceptions # Custom exceptions
+
 ├── reports # JasperReports integration
+
 └── resources # Report templates (JRXML)
 
 
